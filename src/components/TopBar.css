@@ -1,0 +1,138 @@
+/**
+ * TOP BAR STYLES
+ * 
+ * E-commerce style top bar with horizontal layout.
+ */
+
+.top-bar {
+  background: white;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-filters-section {
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.quick-filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.quick-filter-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-background-light);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.quick-filter-button:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.quick-filter-button.active {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: white;
+}
+
+.quick-filter-button.active:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.search-info-section {
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.top-bar-search {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+/* Compact search styles for top bar */
+.top-bar-search .character-search {
+  margin-bottom: 0;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+.top-bar-search .search-header {
+  display: none; /* Hide title in compact mode */
+}
+
+.top-bar-search .search-input-container {
+  margin-bottom: 0;
+}
+
+.top-bar-info {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.item-count {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .top-bar {
+    padding: 1rem;
+  }
+  
+  .search-info-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .top-bar-search {
+    max-width: 100%;
+  }
+  
+  .top-bar-info {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .quick-filters {
+    gap: 0.5rem;
+  }
+  
+  .quick-filter-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .item-count {
+    font-size: 0.85rem;
+  }
+}

@@ -6,9 +6,9 @@
  */
 .character-filters-container {
   background: var(--color-background-light);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(49, 59, 103, 0.1);
-  margin-bottom: 2rem;
+  border-radius: 4px; /* Reduced from 8px for more seamless look */
+  box-shadow: 0 1px 3px rgba(49, 59, 103, 0.08); /* Lighter shadow */
+  margin-bottom: 0; /* No margin in sidebar */
   overflow: hidden; /* Ensures rounded corners on child elements */
   border: 1px solid var(--color-border-light);
 }
@@ -18,12 +18,15 @@
  * 
  * Always visible section with title and toggle button.
  * Uses flexbox for layout.
+ * 
+ * DESKTOP: Stacked vertically (title, badge, button)
+ * MOBILE: Horizontal layout (side by side)
  */
 .filters-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
+  flex-direction: column; /* Stack vertically on desktop */
+  gap: 0.75rem; /* Space between stacked elements */
+  padding: 1rem; /* Reduced from 1.5rem */
   border-bottom: 1px solid var(--color-border-light);
   background-color: var(--color-secondary);
 }
@@ -32,6 +35,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap; /* Allow wrapping if needed */
 }
 
 /**
@@ -41,7 +45,7 @@
  * Padding matches header for visual consistency.
  */
 .character-filters {
-  padding: 1.5rem;
+  padding: 1rem; /* Reduced from 1.5rem for tighter spacing */
   /* No margin-bottom here - container handles it */
 }
 
@@ -141,8 +145,8 @@
 .filters-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
 }
 
 .filter-group {
@@ -211,4 +215,26 @@
 
 .filter-button:active {
   transform: scale(0.98);
+}
+
+/**
+ * RESPONSIVE: MOBILE LAYOUT
+ * 
+ * On mobile, switch to horizontal layout for better space usage.
+ */
+@media (max-width: 768px) {
+  .filters-header {
+    flex-direction: row; /* Horizontal on mobile */
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .filters-header-content {
+    flex: 1; /* Take available space */
+  }
+  
+  .filters-toggle-button {
+    flex-shrink: 0; /* Don't shrink button */
+  }
 }

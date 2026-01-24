@@ -3,20 +3,20 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1.5rem;
-  margin-top: 2rem;
+  padding: 0.75rem; /* Reduced from 1.5rem for more compact spacing */
+  margin: 0; /* Removed margin - spacing handled by parent containers */
 }
 
 .pagination-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.25rem; /* Slightly reduced for more compact buttons */
   background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.95rem; /* Slightly smaller font */
   cursor: pointer;
   transition: background-color 0.2s, opacity 0.2s;
-  min-width: 120px;
+  min-width: 100px; /* Reduced from 120px */
 }
 
 .pagination-button:hover:not(:disabled) {
@@ -34,7 +34,7 @@
 }
 
 .pagination-text {
-  font-size: 1rem;
+  font-size: 0.9rem; /* Slightly smaller for more compact look */
   color: var(--color-text-secondary);
   font-weight: 500;
 }

@@ -189,6 +189,25 @@ function CharacterList() {
   // Render character list
   return (
     <div className="character-list-container">
+      {/* 
+        PAGINATION AT TOP
+        Shows pagination controls at the top of results so users
+        don't have to scroll to the bottom to change pages.
+        Common pattern in e-commerce sites.
+      */}
+      {pagination.pages > 1 && (
+        <div className="pagination-top">
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.pages}
+            hasNext={pagination.next !== null}
+            hasPrev={pagination.prev !== null}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
+      
+      {/* Character Grid */}
       <div className="character-list-grid">
         {characters.map((character) => (
           <CharacterCard
@@ -199,15 +218,21 @@ function CharacterList() {
         ))}
       </div>
       
-      {/* Show pagination if there are multiple pages */}
+      {/* 
+        PAGINATION AT BOTTOM
+        Also shows pagination at the bottom for convenience.
+        Users can navigate pages from either location.
+      */}
       {pagination.pages > 1 && (
-        <Pagination
-          currentPage={pagination.currentPage}
-          totalPages={pagination.pages}
-          hasNext={pagination.next !== null}
-          hasPrev={pagination.prev !== null}
-          onPageChange={handlePageChange}
-        />
+        <div className="pagination-bottom">
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.pages}
+            hasNext={pagination.next !== null}
+            hasPrev={pagination.prev !== null}
+            onPageChange={handlePageChange}
+          />
+        </div>
       )}
       
       {/* Show loading overlay when fetching new page */}

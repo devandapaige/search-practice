@@ -1,12 +1,42 @@
 .character-list-container {
   position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * PAGINATION AT TOP
+ * 
+ * Pagination controls at the top of results.
+ * Allows users to navigate pages without scrolling to bottom.
+ * Compact spacing to reduce visual gaps.
+ */
+.pagination-top {
+  margin-bottom: 1rem; /* Reduced from 2rem */
+  padding-bottom: 0.5rem; /* Reduced from 1rem */
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+/**
+ * PAGINATION AT BOTTOM
+ * 
+ * Pagination controls at the bottom of results.
+ * Convenient for users who scroll through all results.
+ * Compact spacing to reduce visual gaps.
+ */
+.pagination-bottom {
+  margin-top: 1rem; /* Reduced from 2rem */
+  padding-top: 0.5rem; /* Reduced from 1rem */
+  border-top: 1px solid var(--color-border-light);
 }
 
 .character-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin: 0; /* No margin - pagination handles spacing */
+  flex: 1; /* Takes up available space between pagination */
 }
 
 .no-results {

@@ -28,11 +28,83 @@
 
 .app-main {
   flex: 1;
-  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * MAIN CONTENT AREA
+ * 
+ * Two-column layout: sidebar (filters) + main content (results)
+ * Similar to e-commerce sites like Crate & Barrel
+ * 
+ * IMPORTANT: This uses flexbox to create side-by-side layout
+ * - Sidebar (filters) on the LEFT
+ * - Results area on the RIGHT
+ */
+.app-content {
+  display: flex;
+  flex-direction: row; /* Explicitly set to row for side-by-side */
+  align-items: flex-start; /* Align items to top */
+  gap: 1rem; /* Reduced from 2rem for tighter spacing */
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem 1rem 1rem; /* Reduced padding for more seamless look */
+  box-sizing: border-box;
+}
+
+/**
+ * SIDEBAR / SIDE PANEL
+ * 
+ * Left-hand side panel for filters.
+ * Fixed width, scrollable if content is long.
+ * Styled as a distinct panel separate from main content.
+ * 
+ * LAYOUT:
+ * - Fixed width: 300px
+ * - Sticky positioning: Stays visible when scrolling
+ * - Visual separation: Border on right side
+ * - Scrollable: If filter content is long
+ * - Order: 1 (appears first/left in flexbox)
+ */
+.app-sidebar {
+  width: 300px;
+  min-width: 300px; /* Prevent shrinking below this width */
+  flex-shrink: 0;
+  flex-grow: 0; /* Don't grow, stay fixed width */
+  order: 1; /* Explicitly set to appear first (left side) */
+  position: sticky;
+  top: 1rem; /* Reduced from 2rem */
+  align-self: flex-start;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding-right: 1rem; /* Reduced from 2rem */
+  border-right: 1px solid var(--color-border-light); /* Thinner border */
+  margin-right: 0; /* Removed margin - gap handles spacing */
+}
+
+/**
+ * RESULTS AREA
+ * 
+ * Right-hand side taking up remaining space.
+ * Contains: pagination (top) → results → pagination (bottom)
+ * This is where character cards are displayed.
+ * 
+ * LAYOUT:
+ * - Flex: 1 (takes remaining space)
+ * - Order: 2 (appears second/right in flexbox)
+ */
+.app-results {
+  flex: 1;
+  flex-grow: 1; /* Take up remaining space */
+  min-width: 0; /* Allows flex item to shrink below content size */
+  order: 2; /* Explicitly set to appear second (right side) */
+  display: flex;
+  flex-direction: column;
 }
 
 .app-footer {
@@ -55,6 +127,29 @@
 }
 
 /* Responsive design */
+@media (max-width: 1024px) {
+  .app-content {
+    flex-direction: column; /* Stack vertically on smaller screens */
+    gap: 1.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .app-sidebar {
+    width: 100%;
+    min-width: 100%;
+    position: static;
+    max-height: none;
+    padding-right: 0;
+    border-right: none;
+    margin-right: 0;
+    order: 1; /* Still appears first when stacked */
+  }
+  
+  .app-results {
+    order: 2; /* Still appears second when stacked */
+  }
+}
+
 @media (max-width: 768px) {
   .app-title {
     font-size: 2rem;
@@ -64,7 +159,8 @@
     font-size: 1rem;
   }
   
-  .app-main {
-    padding: 1rem;
+  .app-content {
+    padding: 0 1rem 1rem 1rem;
+    gap: 1rem;
   }
 }

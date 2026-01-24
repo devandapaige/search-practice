@@ -15,17 +15,20 @@
  * COMPONENT HIERARCHY:
  * App
  *   ├── Header
- *   ├── CharacterSearch (connects to Redux - real-time search with debouncing)
- *   ├── CharacterFilters (connects to Redux - structured filtering)
- *   └── CharacterList (connects to Redux - displays results)
+ *   ├── TopBar (quick filters, search, item count, sort)
+ *   ├── Main Content Area
+ *   │   ├── Sidebar (CharacterFilters - left side)
+ *   │   └── Results (CharacterList - right side, takes most space)
+ *   └── Footer
  * 
- * SEARCH VS FILTERS:
- * - Search: Quick text lookup, updates as you type (debounced)
- * - Filters: Structured filtering, applied on form submit
- * - Both work together: Search for "rick" + filter by "alive" = alive Ricks
+ * E-COMMERCE LAYOUT:
+ * - Top bar with quick filters and search (like Crate & Barrel)
+ * - Left sidebar for detailed filters
+ * - Right side for results (takes up most of the page)
+ * - Pagination at top and bottom of results
  */
 
-import CharacterSearch from './components/CharacterSearch';
+import TopBar from './components/TopBar';
 import CharacterFilters from './components/CharacterFilters';
 import CharacterList from './components/CharacterList';
 import './App.css';
@@ -47,26 +50,39 @@ function App() {
       
       <main className="app-main">
         {/* 
-          SEARCH COMPONENT
-          Provides real-time search with debouncing.
-          Updates Redux every 2+ characters typed (after 500ms delay).
+          TOP BAR
+          E-commerce style top bar with:
+          - Quick filter buttons (Dead Aliens, Ricks, Mortys, etc.)
+          - Search bar (compact version)
+          - Item count
+          - Sort dropdown
         */}
-        <CharacterSearch />
+        <TopBar />
         
         {/* 
-          FILTER COMPONENT
-          Provides structured filtering (status, species, type, gender).
-          Applied when user submits the form.
-          Works together with search for powerful filtering.
+          MAIN CONTENT AREA
+          Two-column layout: sidebar (filters) + main content (results)
         */}
-        <CharacterFilters />
-        
-        {/* 
-          LIST COMPONENT
-          Displays characters based on both search and filters.
-          Automatically fetches new data when search or filters change.
-        */}
-        <CharacterList />
+        <div className="app-content">
+          {/* 
+            SIDEBAR - FILTERS
+            Left-hand side with detailed filter options.
+            Collapsible for better UX.
+          */}
+          <aside className="app-sidebar">
+            <CharacterFilters />
+          </aside>
+          
+          {/* 
+            MAIN CONTENT - RESULTS
+            Right-hand side taking up most of the page.
+            Displays character cards in a grid.
+            Includes pagination at top and bottom.
+          */}
+          <div className="app-results">
+            <CharacterList />
+          </div>
+        </div>
       </main>
       
       <footer className="app-footer">
