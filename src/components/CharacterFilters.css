@@ -1,0 +1,214 @@
+/**
+ * FILTERS CONTAINER
+ * 
+ * Wrapper for the entire filter section.
+ * Provides consistent styling and spacing.
+ */
+.character-filters-container {
+  background: var(--color-background-light);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(49, 59, 103, 0.1);
+  margin-bottom: 2rem;
+  overflow: hidden; /* Ensures rounded corners on child elements */
+  border: 1px solid var(--color-border-light);
+}
+
+/**
+ * FILTERS HEADER
+ * 
+ * Always visible section with title and toggle button.
+ * Uses flexbox for layout.
+ */
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-secondary);
+}
+
+.filters-header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/**
+ * FILTERS FORM
+ * 
+ * The actual filter form that expands/collapses.
+ * Padding matches header for visual consistency.
+ */
+.character-filters {
+  padding: 1.5rem;
+  /* No margin-bottom here - container handles it */
+}
+
+.filters-title {
+  margin: 0; /* Removed bottom margin - header handles spacing */
+  font-size: 1.5rem;
+  color: var(--color-text-header);
+}
+
+/**
+ * ACTIVE FILTERS BADGE
+ * 
+ * Visual indicator that filters are currently applied.
+ * Uses a pill-shaped badge design.
+ */
+.filters-active-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--color-primary-hover);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/**
+ * TOGGLE BUTTON
+ * 
+ * Button that expands/collapses the filter form.
+ * Includes icon and text for clarity.
+ */
+.filters-toggle-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filters-toggle-button:hover {
+  background-color: var(--color-background-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filters-toggle-button:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(146, 212, 210, 0.2);
+}
+
+.filters-toggle-button:active {
+  transform: scale(0.98);
+}
+
+/**
+ * TOGGLE ICON
+ * 
+ * Arrow icon that rotates when expanded.
+ * CSS transition provides smooth rotation animation.
+ */
+.filters-toggle-icon {
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+  /* 
+   * TRANSFORM EXPLANATION:
+   * - Default: points right (▶) - collapsed state
+   * - When .expanded class added: rotates 90deg to point down (▼)
+   * - transition: smooth animation between states
+   */
+}
+
+.filters-toggle-button.expanded .filters-toggle-icon {
+  transform: rotate(90deg);
+  /* 
+   * ROTATION:
+   * - 90deg rotation makes ▶ become ▼
+   * - Smooth transition makes it animate nicely
+   * - Visual feedback for state change
+   */
+}
+
+.filters-toggle-text {
+  font-weight: 500;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.filter-input,
+.filter-select {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-light);
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(146, 212, 210, 0.2);
+}
+
+.filters-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.filter-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  font-weight: 500;
+}
+
+.filter-button-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.filter-button-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.filter-button-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+}
+
+.filter-button-secondary:hover {
+  background-color: var(--color-border-light);
+}
+
+.filter-button:active {
+  transform: scale(0.98);
+}

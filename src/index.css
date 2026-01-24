@@ -1,0 +1,82 @@
+/**
+ * GLOBAL STYLES
+ * 
+ * These styles apply to the entire application.
+ * Reset styles ensure consistent appearance across browsers.
+ */
+
+/* CSS Reset - removes default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root font settings */
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  /* RICK AND MORTY COLOR PALETTE */
+  /* Colors from character outfits for theme consistency */
+  --color-primary: #92D4D2;        /* Cyan - Rick's lab coat (primary actions) */
+  --color-primary-hover: #E08ACA;  /* Pink - Accent color (hover states) */
+  --color-secondary: #DAC79C;      /* Beige - Neutral (secondary elements) */
+  --color-accent: #E7E367;         /* Yellow - Bright accent (highlights) */
+  --color-error: #F96153;           /* Coral/Red - Morty's shirt (errors) */
+  --color-dark: #313B67;           /* Dark blue - Footers */
+  --color-header-bg: #56F018;      /* Bright green - Site header (Rick and Morty on-brand) */
+  --color-text-primary: #313B67;   /* Dark blue - Primary text */
+  --color-text-header: #000000;    /* Black - Headers for better readability */
+  --color-text-secondary: #827345; /* Brown - Secondary text */
+  --color-background: #ffffff;      /* White - Background for better UX */
+  --color-background-light: #ffffff; /* White - Card backgrounds */
+  --color-border: #827345;         /* Brown - Borders */
+  --color-border-light: rgba(130, 115, 69, 0.3); /* Light brown - Subtle borders */
+  
+  color-scheme: light;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-light);
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Body styles */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* Remove default button styles */
+button {
+  font-family: inherit;
+}
+
+/* Remove default list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Link styles */
+a {
+  font-weight: 500;
+  text-decoration: inherit;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
