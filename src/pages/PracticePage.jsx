@@ -696,6 +696,258 @@ const algorithms = [
   },
 ];
 
+const requirementsById = {
+  'binary-search': ['Sorted array'],
+  'jump-search': ['Sorted array'],
+  'interpolation-search': ['Sorted array', 'Uniform distribution'],
+  'exponential-search': ['Sorted array'],
+  'counting-sort': ['Small integer range'],
+  'radix-sort': ['Fixed-length keys or digits'],
+  'bucket-sort': ['Uniform distribution'],
+  dijkstra: ['Non-negative edge weights'],
+  'bellman-ford': ['Detect negative cycles'],
+  'floyd-warshall': ['Small or dense graphs'],
+  'a-star': ['Admissible heuristic'],
+  'topological-sort': ['Directed acyclic graph'],
+  kruskal: ['Weighted undirected graph'],
+  prim: ['Weighted undirected graph'],
+  'trie-operations': ['Prefix queries'],
+};
+
+const algorithmSignals = [
+  {
+    title: 'Sorted data + direct access',
+    signal: 'Data is sorted and indexed (arrays, lists with random access).',
+    suggestion: 'Binary Search, Jump Search, or Interpolation Search',
+    tip: 'If updates are rare, sort once and search fast afterward.',
+  },
+  {
+    title: 'Need a shortest path',
+    signal: 'Edges represent costs, time, or distances.',
+    suggestion: 'BFS for unweighted, Dijkstra for non-negative, Bellman-Ford for negative',
+    tip: 'A* is ideal when you have a reliable heuristic.',
+  },
+  {
+    title: 'Overlapping subproblems',
+    signal: 'The same smaller problem shows up repeatedly.',
+    suggestion: 'Dynamic programming (memoization or tabulation)',
+    tip: 'Write the recurrence first, then choose cache or table.',
+  },
+  {
+    title: 'Local choices seem optimal',
+    signal: 'Picking the best next step appears safe.',
+    suggestion: 'Greedy algorithms with a proof',
+    tip: 'Confirm the greedy choice and optimal substructure before committing.',
+  },
+];
+
+const nodeGraphics = [
+  {
+    id: 'bfs-layers',
+    title: 'Layered graph (BFS intuition)',
+    description: 'Queues expand outward one layer at a time.',
+    render: () => (
+      <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+        <line className="node-line" x1="110" y1="18" x2="70" y2="52" />
+        <line className="node-line" x1="110" y1="18" x2="150" y2="52" />
+        <line className="node-line" x1="70" y1="52" x2="40" y2="98" />
+        <line className="node-line" x1="70" y1="52" x2="95" y2="98" />
+        <line className="node-line" x1="150" y1="52" x2="125" y2="98" />
+        <line className="node-line" x1="150" y1="52" x2="180" y2="98" />
+        <circle className="node-dot node-dot-accent" cx="110" cy="18" r="10" />
+        <circle className="node-dot" cx="70" cy="52" r="9" />
+        <circle className="node-dot" cx="150" cy="52" r="9" />
+        <circle className="node-dot" cx="40" cy="98" r="8" />
+        <circle className="node-dot" cx="95" cy="98" r="8" />
+        <circle className="node-dot" cx="125" cy="98" r="8" />
+        <circle className="node-dot" cx="180" cy="98" r="8" />
+      </svg>
+    ),
+  },
+  {
+    id: 'weighted-routes',
+    title: 'Weighted graph (shortest path)',
+    description: 'Edge weights guide Dijkstra and A*.',
+    render: () => (
+      <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+        <line className="node-line" x1="50" y1="30" x2="160" y2="30" />
+        <line className="node-line" x1="50" y1="30" x2="110" y2="110" />
+        <line className="node-line" x1="160" y1="30" x2="110" y2="110" />
+        <line className="node-line" x1="110" y1="110" x2="190" y2="90" />
+        <circle className="node-dot node-dot-accent" cx="50" cy="30" r="9" />
+        <circle className="node-dot" cx="160" cy="30" r="9" />
+        <circle className="node-dot" cx="110" cy="110" r="9" />
+        <circle className="node-dot node-dot-goal" cx="190" cy="90" r="9" />
+        <text className="node-label" x="105" y="22">3</text>
+        <text className="node-label" x="65" y="75">5</text>
+        <text className="node-label" x="135" y="75">2</text>
+        <text className="node-label" x="155" y="108">4</text>
+      </svg>
+    ),
+  },
+  {
+    id: 'grid-neighbors',
+    title: 'Grid neighbors (pathfinding)',
+    description: 'A* explores nodes toward a goal on grids.',
+    render: () => (
+      <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+        <g className="node-line">
+          <line x1="50" y1="30" x2="110" y2="30" />
+          <line x1="110" y1="30" x2="170" y2="30" />
+          <line x1="50" y1="70" x2="110" y2="70" />
+          <line x1="110" y1="70" x2="170" y2="70" />
+          <line x1="50" y1="110" x2="110" y2="110" />
+          <line x1="110" y1="110" x2="170" y2="110" />
+          <line x1="50" y1="30" x2="50" y2="110" />
+          <line x1="110" y1="30" x2="110" y2="110" />
+          <line x1="170" y1="30" x2="170" y2="110" />
+        </g>
+        <circle className="node-dot node-dot-accent" cx="50" cy="30" r="7" />
+        <circle className="node-dot" cx="110" cy="30" r="7" />
+        <circle className="node-dot" cx="170" cy="30" r="7" />
+        <circle className="node-dot" cx="50" cy="70" r="7" />
+        <circle className="node-dot" cx="110" cy="70" r="7" />
+        <circle className="node-dot" cx="170" cy="70" r="7" />
+        <circle className="node-dot" cx="50" cy="110" r="7" />
+        <circle className="node-dot" cx="110" cy="110" r="7" />
+        <circle className="node-dot node-dot-goal" cx="170" cy="110" r="7" />
+      </svg>
+    ),
+  },
+];
+
+const codeSamples = [
+  {
+    id: 'binary-search',
+    title: 'Binary Search',
+    focus: 'Search',
+    description: 'Fast lookup in sorted arrays by halving the search space.',
+    python: `def binary_search(nums, target):
+    low, high = 0, len(nums) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1`,
+    javascript: `function binarySearch(nums, target) {
+  let low = 0;
+  let high = nums.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    if (nums[mid] === target) return mid;
+    if (nums[mid] < target) low = mid + 1;
+    else high = mid - 1;
+  }
+  return -1;
+}`,
+  },
+  {
+    id: 'merge-sort',
+    title: 'Merge Sort',
+    focus: 'Sorting',
+    description: 'Divide, sort, and merge to keep ordering stable.',
+    python: `def merge_sort(items):
+    if len(items) <= 1:
+        return items
+    mid = len(items) // 2
+    left = merge_sort(items[:mid])
+    right = merge_sort(items[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    return result + left[i:] + right[j:]`,
+    javascript: `function mergeSort(items) {
+  if (items.length <= 1) return items;
+  const mid = Math.floor(items.length / 2);
+  const left = mergeSort(items.slice(0, mid));
+  const right = mergeSort(items.slice(mid));
+  return merge(left, right);
+}
+
+function merge(left, right) {
+  const result = [];
+  let i = 0;
+  let j = 0;
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) result.push(left[i++]);
+    else result.push(right[j++]);
+  }
+  return result.concat(left.slice(i), right.slice(j));
+}`,
+  },
+  {
+    id: 'bfs',
+    title: 'Breadth-First Search (BFS)',
+    focus: 'Graph',
+    description: 'Traverse a graph level by level using a queue.',
+    python: `from collections import deque
+
+def bfs(graph, start):
+    visited = {start}
+    order = []
+    queue = deque([start])
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return order`,
+    javascript: `function bfs(graph, start) {
+  const visited = new Set([start]);
+  const order = [];
+  const queue = [start];
+  while (queue.length) {
+    const node = queue.shift();
+    order.push(node);
+    for (const neighbor of graph[node] ?? []) {
+      if (!visited.has(neighbor)) {
+        visited.add(neighbor);
+        queue.push(neighbor);
+      }
+    }
+  }
+  return order;
+}`,
+  },
+  {
+    id: 'kadanes',
+    title: "Kadane's Algorithm",
+    focus: 'Dynamic Programming',
+    description: 'Track the best running sum to find the max subarray.',
+    python: `def max_subarray(nums):
+    best = nums[0]
+    current = 0
+    for value in nums:
+        current = max(value, current + value)
+        best = max(best, current)
+    return best`,
+    javascript: `function maxSubarray(nums) {
+  let best = nums[0];
+  let current = 0;
+  for (const value of nums) {
+    current = Math.max(value, current + value);
+    best = Math.max(best, current);
+  }
+  return best;
+}`,
+  },
+];
+
 export default function PracticePage() {
   const groupedAlgorithms = algorithmCategories.map((category) => ({
     ...category,
@@ -707,19 +959,26 @@ export default function PracticePage() {
       <section className="practice-hero">
         <div>
           <p className="practice-eyebrow">Practice hub</p>
-          <h2>Search patterns and 40 core algorithms</h2>
+          <h2>Search patterns, node graphics, and 40 core algorithms</h2>
           <p>
             Use this page as a guided study tool. Review search patterns used in
-            this app, then work through the algorithm catalog with clear steps,
-            examples, and the reasoning behind each approach.
+            this app, visualize graph structures, explore code samples, and then
+            work through the algorithm catalog with clear steps, examples, and
+            the reasoning behind each approach.
           </p>
         </div>
         <div className="practice-actions">
           <a className="practice-button" href="#search-patterns">
-            Jump to search patterns
+            Search patterns
+          </a>
+          <a className="practice-button practice-button-secondary" href="#node-graphics">
+            Node graphics
+          </a>
+          <a className="practice-button" href="#code-examples">
+            Code samples
           </a>
           <a className="practice-button practice-button-secondary" href="#algorithm-catalog">
-            Jump to algorithm catalog
+            Algorithm catalog
           </a>
         </div>
       </section>
@@ -765,6 +1024,66 @@ export default function PracticePage() {
         </div>
       </section>
 
+      <section className="practice-section" id="node-graphics">
+        <header className="practice-section-header">
+          <div>
+            <h2>Node graphics to build intuition</h2>
+            <p>
+              Visualize the shapes algorithms operate on. These sketches match
+              common interview diagrams and help you spot which algorithm fits.
+            </p>
+          </div>
+        </header>
+        <div className="practice-graphic-grid">
+          {nodeGraphics.map((graphic) => (
+            <article className="practice-graphic-card" key={graphic.id}>
+              <div className="practice-graphic-visual">{graphic.render()}</div>
+              <h3>{graphic.title}</h3>
+              <p>{graphic.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="practice-section" id="code-examples">
+        <header className="practice-section-header">
+          <div>
+            <h2>Sample Python and JavaScript implementations</h2>
+            <p>
+              Keep these snippets close while practicing. Each example pairs a
+              Python solution with an equivalent JavaScript implementation.
+            </p>
+          </div>
+        </header>
+        <div className="code-sample-grid">
+          {codeSamples.map((sample) => (
+            <article className="code-sample-card" key={sample.id}>
+              <header className="code-sample-header">
+                <div>
+                  <h3>{sample.title}</h3>
+                  <p className="code-sample-focus">{sample.focus}</p>
+                </div>
+              </header>
+              <p className="code-sample-description">{sample.description}</p>
+              <div className="code-sample-blocks">
+                <div>
+                  <span className="code-language">Python</span>
+                  <pre className="code-block">
+                    <code>{sample.python}</code>
+                  </pre>
+                </div>
+                <div>
+                  <span className="code-language">JavaScript</span>
+                  <pre className="code-block">
+                    <code>{sample.javascript}</code>
+                  </pre>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="practice-section" id="algorithm-catalog">
         <header className="practice-section-header">
           <div>
@@ -775,6 +1094,21 @@ export default function PracticePage() {
             </p>
           </div>
         </header>
+
+        <div className="practice-signal-grid">
+          {algorithmSignals.map((signal) => (
+            <article className="practice-signal-card" key={signal.title}>
+              <h3>{signal.title}</h3>
+              <p>
+                <strong>Signal:</strong> {signal.signal}
+              </p>
+              <p>
+                <strong>Start with:</strong> {signal.suggestion}
+              </p>
+              <p className="practice-signal-tip">{signal.tip}</p>
+            </article>
+          ))}
+        </div>
 
         <nav className="practice-toc" aria-label="Algorithm categories">
           {groupedAlgorithms.map((category) => (
@@ -808,6 +1142,11 @@ export default function PracticePage() {
                       <span className="algorithm-complexity">{algorithm.complexity}</span>
                     </header>
                     <p className="algorithm-summary">{algorithm.summary}</p>
+                    {requirementsById[algorithm.id] && (
+                      <p className="algorithm-requirements">
+                        <strong>Requires:</strong> {requirementsById[algorithm.id].join(', ')}
+                      </p>
+                    )}
                     <div className="algorithm-details">
                       <h5>Solve it by</h5>
                       <ol className="algorithm-steps">

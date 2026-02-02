@@ -6,9 +6,8 @@
 }
 
 .app-header {
-  /* Rick and Morty on-brand: Bright green header with black text */
-  background-color: var(--color-header-bg);
-  color: var(--color-text-header);
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
   padding: 2rem;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -35,21 +34,23 @@
 }
 
 .app-nav-link {
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(49, 59, 103, 0.35);
   border-radius: 999px;
   padding: 0.35rem 0.9rem;
-  color: var(--color-text-header);
+  color: var(--color-text-primary);
   font-weight: 600;
-  transition: background-color 0.2s, transform 0.2s;
+  background-color: rgba(255, 255, 255, 0.35);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .app-nav-link:hover {
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.6);
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(49, 59, 103, 0.2);
 }
 
 .app-nav-link-active {
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .app-title {
@@ -72,6 +73,22 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+.app-secondary-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.app-secondary-hero h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.app-secondary-hero p {
+  margin-top: 0.35rem;
+  color: var(--color-text-secondary);
 }
 
 /**

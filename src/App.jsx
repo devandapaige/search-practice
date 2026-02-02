@@ -14,18 +14,19 @@
  * 
  * COMPONENT HIERARCHY:
  * App
- *   ├── Header (title + primary navigation)
+ *   ├── Header (practice hub branding + primary navigation)
  *   ├── Routes
- *   │   ├── HomePage (character browser layout)
- *   │   └── PracticePage (search patterns + algorithm catalog)
+ *   │   ├── PracticePage (search patterns + algorithm catalog)
+ *   │   └── HomePage (character browser layout)
  *   └── Footer
  *
  * ROUTING:
- * - "/" shows the Rick and Morty character browser
+ * - "/" redirects to "/practice"
  * - "/practice" shows the study tool for algorithms and search patterns
+ * - "/characters" shows the Rick and Morty character browser
  */
 
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import PracticePage from './pages/PracticePage';
 import './App.css';
@@ -44,17 +45,17 @@ function App() {
       <header className="app-header">
         <div className="app-header-inner">
           <div className="app-header-text">
-            <h1 className="app-title">Rick and Morty Character Browser</h1>
+            <h1 className="app-title">Algorithm Practice Studio</h1>
             <p className="app-subtitle">
-              Explore characters and study search patterns plus core algorithms
+              Search patterns, core algorithms, and guided code examples
             </p>
           </div>
           <nav className="app-nav" aria-label="Primary">
-            <NavLink to="/" end className={getNavLinkClass}>
-              Character Browser
-            </NavLink>
             <NavLink to="/practice" className={getNavLinkClass}>
-              Practice
+              Practice Hub
+            </NavLink>
+            <NavLink to="/characters" className={getNavLinkClass}>
+              Character Browser
             </NavLink>
           </nav>
         </div>
@@ -62,17 +63,18 @@ function App() {
       
       <main className="app-main">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to="/practice" replace />} />
           <Route path="/practice" element={<PracticePage />} />
+          <Route path="/characters" element={<HomePage />} />
         </Routes>
       </main>
       
       <footer className="app-footer">
         <p>
-          Data provided by{' '}
-          <a 
-            href="https://rickandmortyapi.com" 
-            target="_blank" 
+          Character browser data provided by{' '}
+          <a
+            href="https://rickandmortyapi.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="footer-link"
           >
