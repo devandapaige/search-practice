@@ -11,6 +11,7 @@ import {
   SearchHighlightExample,
   SearchThresholdExample,
 } from '../study-guide';
+import { algorithmSolutions, diagramById } from './algorithmSolutions';
 import './PracticePage.css';
 
 const searchPatternCards = [
@@ -816,137 +817,332 @@ const nodeGraphics = [
   },
 ];
 
-const codeSamples = [
-  {
-    id: 'binary-search',
-    title: 'Binary Search',
-    focus: 'Search',
-    description: 'Fast lookup in sorted arrays by halving the search space.',
-    python: `def binary_search(nums, target):
-    low, high = 0, len(nums) - 1
-    while low <= high:
-        mid = (low + high) // 2
-        if nums[mid] == target:
-            return mid
-        if nums[mid] < target:
-            low = mid + 1
-        else:
-            high = mid - 1
-    return -1`,
-    javascript: `function binarySearch(nums, target) {
-  let low = 0;
-  let high = nums.length - 1;
-  while (low <= high) {
-    const mid = Math.floor((low + high) / 2);
-    if (nums[mid] === target) return mid;
-    if (nums[mid] < target) low = mid + 1;
-    else high = mid - 1;
-  }
-  return -1;
-}`,
-  },
-  {
-    id: 'merge-sort',
-    title: 'Merge Sort',
-    focus: 'Sorting',
-    description: 'Divide, sort, and merge to keep ordering stable.',
-    python: `def merge_sort(items):
-    if len(items) <= 1:
-        return items
-    mid = len(items) // 2
-    left = merge_sort(items[:mid])
-    right = merge_sort(items[mid:])
-    return merge(left, right)
+const rowPositions = [20, 55, 90, 125, 160, 195];
+const rowY = 30;
 
-def merge(left, right):
-    result = []
-    i = j = 0
-    while i < len(left) and j < len(right):
-        if left[i] <= right[j]:
-            result.append(left[i])
-            i += 1
-        else:
-            result.append(right[j])
-            j += 1
-    return result + left[i:] + right[j:]`,
-    javascript: `function mergeSort(items) {
-  if (items.length <= 1) return items;
-  const mid = Math.floor(items.length / 2);
-  const left = mergeSort(items.slice(0, mid));
-  const right = mergeSort(items.slice(mid));
-  return merge(left, right);
-}
+const renderRowDiagram = ({ accent = [], goal = [], highlight = [], blocks = [] }) => (
+  <svg viewBox="0 0 220 60" aria-hidden="true" focusable="false">
+    {blocks.map((block, index) => (
+      <rect
+        key={`block-${index}`}
+        className={`node-block${block.highlight ? ' node-block-highlight' : ''}`}
+        x={block.x}
+        y="12"
+        width={block.width}
+        height="36"
+        rx="8"
+      />
+    ))}
+    {rowPositions.slice(0, -1).map((x, index) => (
+      <line
+        key={`line-${index}`}
+        className="node-line"
+        x1={x}
+        y1={rowY}
+        x2={rowPositions[index + 1]}
+        y2={rowY}
+      />
+    ))}
+    {rowPositions.map((x, index) => {
+      const classes = ['node-dot'];
+      if (accent.includes(index)) classes.push('node-dot-accent');
+      if (goal.includes(index)) classes.push('node-dot-goal');
+      if (highlight.includes(index)) classes.push('node-dot-highlight');
+      return <circle key={`node-${index}`} className={classes.join(' ')} cx={x} cy={rowY} r="8" />;
+    })}
+  </svg>
+);
 
-function merge(left, right) {
-  const result = [];
-  let i = 0;
-  let j = 0;
-  while (i < left.length && j < right.length) {
-    if (left[i] <= right[j]) result.push(left[i++]);
-    else result.push(right[j++]);
-  }
-  return result.concat(left.slice(i), right.slice(j));
-}`,
-  },
-  {
-    id: 'bfs',
-    title: 'Breadth-First Search (BFS)',
-    focus: 'Graph',
-    description: 'Traverse a graph level by level using a queue.',
-    python: `from collections import deque
-
-def bfs(graph, start):
-    visited = {start}
-    order = []
-    queue = deque([start])
-    while queue:
-        node = queue.popleft()
-        order.append(node)
-        for neighbor in graph.get(node, []):
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
-    return order`,
-    javascript: `function bfs(graph, start) {
-  const visited = new Set([start]);
-  const order = [];
-  const queue = [start];
-  while (queue.length) {
-    const node = queue.shift();
-    order.push(node);
-    for (const neighbor of graph[node] ?? []) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push(neighbor);
-      }
-    }
-  }
-  return order;
-}`,
-  },
-  {
-    id: 'kadanes',
-    title: "Kadane's Algorithm",
-    focus: 'Dynamic Programming',
-    description: 'Track the best running sum to find the max subarray.',
-    python: `def max_subarray(nums):
-    best = nums[0]
-    current = 0
-    for value in nums:
-        current = max(value, current + value)
-        best = max(best, current)
-    return best`,
-    javascript: `function maxSubarray(nums) {
-  let best = nums[0];
-  let current = 0;
-  for (const value of nums) {
-    current = Math.max(value, current + value);
-    best = Math.max(best, current);
-  }
-  return best;
-}`,
-  },
-];
+const diagramRenderers = {
+  'array-scan': () => renderRowDiagram({ accent: [0, 1, 2], goal: [5] }),
+  'array-halving': () => renderRowDiagram({ accent: [2], highlight: [0, 5], goal: [4] }),
+  'sorting-basic': () => renderRowDiagram({ highlight: [2, 3], accent: [1] }),
+  'sorting-merge': () => (
+    <svg viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="50" y1="30" x2="85" y2="60" />
+        <line x1="80" y1="30" x2="105" y2="60" />
+        <line x1="140" y1="30" x2="115" y2="60" />
+        <line x1="170" y1="30" x2="140" y2="60" />
+        <line x1="85" y1="60" x2="70" y2="95" />
+        <line x1="105" y1="60" x2="95" y2="95" />
+        <line x1="115" y1="60" x2="120" y2="95" />
+        <line x1="140" y1="60" x2="145" y2="95" />
+      </g>
+      <circle className="node-dot" cx="50" cy="30" r="7" />
+      <circle className="node-dot" cx="80" cy="30" r="7" />
+      <circle className="node-dot" cx="140" cy="30" r="7" />
+      <circle className="node-dot" cx="170" cy="30" r="7" />
+      <circle className="node-dot node-dot-accent" cx="85" cy="60" r="7" />
+      <circle className="node-dot node-dot-accent" cx="105" cy="60" r="7" />
+      <circle className="node-dot node-dot-accent" cx="115" cy="60" r="7" />
+      <circle className="node-dot node-dot-accent" cx="140" cy="60" r="7" />
+      <circle className="node-dot node-dot-goal" cx="70" cy="95" r="7" />
+      <circle className="node-dot node-dot-goal" cx="95" cy="95" r="7" />
+      <circle className="node-dot node-dot-goal" cx="120" cy="95" r="7" />
+      <circle className="node-dot node-dot-goal" cx="145" cy="95" r="7" />
+    </svg>
+  ),
+  'sorting-quick': () => renderRowDiagram({ highlight: [3], accent: [0, 1], goal: [4, 5] }),
+  'sorting-heap': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="110" y1="20" x2="70" y2="60" />
+        <line x1="110" y1="20" x2="150" y2="60" />
+        <line x1="70" y1="60" x2="50" y2="100" />
+        <line x1="70" y1="60" x2="90" y2="100" />
+        <line x1="150" y1="60" x2="130" y2="100" />
+        <line x1="150" y1="60" x2="170" y2="100" />
+      </g>
+      <circle className="node-dot node-dot-accent" cx="110" cy="20" r="9" />
+      <circle className="node-dot" cx="70" cy="60" r="8" />
+      <circle className="node-dot" cx="150" cy="60" r="8" />
+      <circle className="node-dot" cx="50" cy="100" r="7" />
+      <circle className="node-dot" cx="90" cy="100" r="7" />
+      <circle className="node-dot" cx="130" cy="100" r="7" />
+      <circle className="node-dot" cx="170" cy="100" r="7" />
+    </svg>
+  ),
+  'sorting-buckets': () => (
+    <svg viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+      <rect className="node-block" x="20" y="20" width="50" height="80" rx="8" />
+      <rect className="node-block node-block-highlight" x="85" y="20" width="50" height="80" rx="8" />
+      <rect className="node-block" x="150" y="20" width="50" height="80" rx="8" />
+      <circle className="node-dot" cx="45" cy="45" r="6" />
+      <circle className="node-dot" cx="45" cy="70" r="6" />
+      <circle className="node-dot node-dot-accent" cx="110" cy="45" r="6" />
+      <circle className="node-dot node-dot-accent" cx="110" cy="70" r="6" />
+      <circle className="node-dot" cx="175" cy="55" r="6" />
+    </svg>
+  ),
+  'graph-basic': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="110" y1="18" x2="70" y2="52" />
+      <line className="node-line" x1="110" y1="18" x2="150" y2="52" />
+      <line className="node-line" x1="70" y1="52" x2="40" y2="98" />
+      <line className="node-line" x1="70" y1="52" x2="95" y2="98" />
+      <line className="node-line" x1="150" y1="52" x2="125" y2="98" />
+      <line className="node-line" x1="150" y1="52" x2="180" y2="98" />
+      <circle className="node-dot node-dot-accent" cx="110" cy="18" r="10" />
+      <circle className="node-dot" cx="70" cy="52" r="9" />
+      <circle className="node-dot" cx="150" cy="52" r="9" />
+      <circle className="node-dot" cx="40" cy="98" r="8" />
+      <circle className="node-dot" cx="95" cy="98" r="8" />
+      <circle className="node-dot" cx="125" cy="98" r="8" />
+      <circle className="node-dot" cx="180" cy="98" r="8" />
+    </svg>
+  ),
+  'graph-weighted': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="50" y1="30" x2="160" y2="30" />
+      <line className="node-line" x1="50" y1="30" x2="110" y2="110" />
+      <line className="node-line" x1="160" y1="30" x2="110" y2="110" />
+      <line className="node-line" x1="110" y1="110" x2="190" y2="90" />
+      <circle className="node-dot node-dot-accent" cx="50" cy="30" r="9" />
+      <circle className="node-dot" cx="160" cy="30" r="9" />
+      <circle className="node-dot" cx="110" cy="110" r="9" />
+      <circle className="node-dot node-dot-goal" cx="190" cy="90" r="9" />
+      <text className="node-label" x="105" y="22">3</text>
+      <text className="node-label" x="65" y="75">5</text>
+      <text className="node-label" x="135" y="75">2</text>
+      <text className="node-label" x="155" y="108">4</text>
+    </svg>
+  ),
+  'graph-matrix': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="50" y1="30" x2="110" y2="30" />
+        <line x1="110" y1="30" x2="170" y2="30" />
+        <line x1="50" y1="70" x2="110" y2="70" />
+        <line x1="110" y1="70" x2="170" y2="70" />
+        <line x1="50" y1="110" x2="110" y2="110" />
+        <line x1="110" y1="110" x2="170" y2="110" />
+        <line x1="50" y1="30" x2="50" y2="110" />
+        <line x1="110" y1="30" x2="110" y2="110" />
+        <line x1="170" y1="30" x2="170" y2="110" />
+      </g>
+      <circle className="node-dot node-dot-accent" cx="50" cy="30" r="7" />
+      <circle className="node-dot" cx="110" cy="30" r="7" />
+      <circle className="node-dot" cx="170" cy="30" r="7" />
+      <circle className="node-dot" cx="50" cy="70" r="7" />
+      <circle className="node-dot node-dot-highlight" cx="110" cy="70" r="7" />
+      <circle className="node-dot" cx="170" cy="70" r="7" />
+      <circle className="node-dot" cx="50" cy="110" r="7" />
+      <circle className="node-dot" cx="110" cy="110" r="7" />
+      <circle className="node-dot node-dot-goal" cx="170" cy="110" r="7" />
+    </svg>
+  ),
+  'graph-dag': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="40" y1="30" x2="110" y2="30" />
+      <line className="node-line" x1="40" y1="30" x2="80" y2="90" />
+      <line className="node-line" x1="110" y1="30" x2="170" y2="90" />
+      <line className="node-line" x1="80" y1="90" x2="170" y2="90" />
+      <circle className="node-dot node-dot-accent" cx="40" cy="30" r="8" />
+      <circle className="node-dot" cx="110" cy="30" r="8" />
+      <circle className="node-dot" cx="80" cy="90" r="8" />
+      <circle className="node-dot node-dot-goal" cx="170" cy="90" r="8" />
+    </svg>
+  ),
+  'graph-mst': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="40" y1="30" x2="110" y2="20" />
+      <line className="node-line-active" x1="40" y1="30" x2="80" y2="90" />
+      <line className="node-line-active" x1="110" y1="20" x2="150" y2="90" />
+      <line className="node-line" x1="80" y1="90" x2="150" y2="90" />
+      <line className="node-line-active" x1="150" y1="90" x2="190" y2="40" />
+      <circle className="node-dot node-dot-accent" cx="40" cy="30" r="8" />
+      <circle className="node-dot" cx="110" cy="20" r="8" />
+      <circle className="node-dot" cx="80" cy="90" r="8" />
+      <circle className="node-dot" cx="150" cy="90" r="8" />
+      <circle className="node-dot node-dot-goal" cx="190" cy="40" r="8" />
+    </svg>
+  ),
+  'structure-union': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="60" y1="30" x2="40" y2="90" />
+      <line className="node-line" x1="60" y1="30" x2="80" y2="90" />
+      <line className="node-line" x1="160" y1="30" x2="140" y2="90" />
+      <line className="node-line" x1="160" y1="30" x2="180" y2="90" />
+      <circle className="node-dot node-dot-accent" cx="60" cy="30" r="9" />
+      <circle className="node-dot" cx="160" cy="30" r="9" />
+      <circle className="node-dot" cx="40" cy="90" r="7" />
+      <circle className="node-dot" cx="80" cy="90" r="7" />
+      <circle className="node-dot" cx="140" cy="90" r="7" />
+      <circle className="node-dot" cx="180" cy="90" r="7" />
+    </svg>
+  ),
+  'structure-trie': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="110" y1="20" x2="70" y2="60" />
+      <line className="node-line" x1="110" y1="20" x2="150" y2="60" />
+      <line className="node-line" x1="70" y1="60" x2="50" y2="100" />
+      <line className="node-line" x1="150" y1="60" x2="170" y2="100" />
+      <circle className="node-dot node-dot-accent" cx="110" cy="20" r="8" />
+      <circle className="node-dot" cx="70" cy="60" r="7" />
+      <circle className="node-dot" cx="150" cy="60" r="7" />
+      <circle className="node-dot node-dot-highlight" cx="50" cy="100" r="6" />
+      <circle className="node-dot node-dot-highlight" cx="170" cy="100" r="6" />
+      <text className="node-label" x="40" y="92">c</text>
+      <text className="node-label" x="160" y="92">t</text>
+    </svg>
+  ),
+  'dp-grid': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="50" y1="30" x2="110" y2="30" />
+        <line x1="110" y1="30" x2="170" y2="30" />
+        <line x1="50" y1="70" x2="110" y2="70" />
+        <line x1="110" y1="70" x2="170" y2="70" />
+        <line x1="50" y1="110" x2="110" y2="110" />
+        <line x1="110" y1="110" x2="170" y2="110" />
+        <line x1="50" y1="30" x2="50" y2="110" />
+        <line x1="110" y1="30" x2="110" y2="110" />
+        <line x1="170" y1="30" x2="170" y2="110" />
+      </g>
+      <circle className="node-dot node-dot-accent" cx="50" cy="30" r="7" />
+      <circle className="node-dot" cx="110" cy="30" r="7" />
+      <circle className="node-dot" cx="170" cy="30" r="7" />
+      <circle className="node-dot" cx="50" cy="70" r="7" />
+      <circle className="node-dot node-dot-highlight" cx="110" cy="70" r="7" />
+      <circle className="node-dot" cx="170" cy="70" r="7" />
+      <circle className="node-dot" cx="50" cy="110" r="7" />
+      <circle className="node-dot" cx="110" cy="110" r="7" />
+      <circle className="node-dot node-dot-goal" cx="170" cy="110" r="7" />
+    </svg>
+  ),
+  subarray: () =>
+    renderRowDiagram({
+      blocks: [{ x: 55, width: 120, highlight: true }],
+      accent: [1, 2, 3, 4],
+      goal: [3],
+    }),
+  'string-match': () => (
+    <svg viewBox="0 0 220 90" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="20" y1="25" x2="195" y2="25" />
+        <line x1="55" y1="65" x2="160" y2="65" />
+      </g>
+      {rowPositions.map((x, index) => (
+        <circle
+          key={`text-${index}`}
+          className={`node-dot${index >= 2 && index <= 4 ? ' node-dot-highlight' : ''}`}
+          cx={x}
+          cy={25}
+          r="6"
+        />
+      ))}
+      {[55, 90, 125, 160].map((x, index) => (
+        <circle
+          key={`pattern-${index}`}
+          className={`node-dot${index >= 0 && index <= 2 ? ' node-dot-accent' : ''}`}
+          cx={x}
+          cy={65}
+          r="6"
+        />
+      ))}
+    </svg>
+  ),
+  intervals: () => (
+    <svg viewBox="0 0 220 100" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="30" y1="50" x2="190" y2="50" />
+      <rect className="node-block" x="40" y="30" width="60" height="15" rx="6" />
+      <rect className="node-block node-block-highlight" x="90" y="55" width="70" height="15" rx="6" />
+      <rect className="node-block" x="150" y="30" width="40" height="15" rx="6" />
+      <circle className="node-dot node-dot-accent" cx="40" cy="50" r="6" />
+      <circle className="node-dot" cx="100" cy="50" r="6" />
+      <circle className="node-dot" cx="150" cy="50" r="6" />
+      <circle className="node-dot node-dot-goal" cx="190" cy="50" r="6" />
+    </svg>
+  ),
+  huffman: () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      <g className="node-line">
+        <line x1="110" y1="20" x2="70" y2="60" />
+        <line x1="110" y1="20" x2="150" y2="60" />
+        <line x1="70" y1="60" x2="50" y2="100" />
+        <line x1="70" y1="60" x2="90" y2="100" />
+        <line x1="150" y1="60" x2="130" y2="100" />
+        <line x1="150" y1="60" x2="170" y2="100" />
+      </g>
+      <circle className="node-dot node-dot-accent" cx="110" cy="20" r="8" />
+      <circle className="node-dot" cx="70" cy="60" r="7" />
+      <circle className="node-dot" cx="150" cy="60" r="7" />
+      <circle className="node-dot node-dot-highlight" cx="50" cy="100" r="6" />
+      <circle className="node-dot node-dot-highlight" cx="90" cy="100" r="6" />
+      <circle className="node-dot node-dot-highlight" cx="130" cy="100" r="6" />
+      <circle className="node-dot node-dot-highlight" cx="170" cy="100" r="6" />
+    </svg>
+  ),
+  'math-basic': () => (
+    <svg viewBox="0 0 220 80" aria-hidden="true" focusable="false">
+      <line className="node-line" x1="40" y1="40" x2="110" y2="40" />
+      <line className="node-line" x1="110" y1="40" x2="180" y2="40" />
+      <circle className="node-dot node-dot-accent" cx="40" cy="40" r="8" />
+      <circle className="node-dot node-dot-highlight" cx="110" cy="40" r="8" />
+      <circle className="node-dot node-dot-goal" cx="180" cy="40" r="8" />
+    </svg>
+  ),
+  'math-sieve': () => (
+    <svg viewBox="0 0 220 140" aria-hidden="true" focusable="false">
+      {[50, 90, 130, 170].map((x, colIndex) =>
+        [30, 70, 110].map((y, rowIndex) => {
+          const index = rowIndex * 4 + colIndex;
+          const muted = [3, 5, 7, 8, 10].includes(index);
+          return (
+            <circle
+              key={`prime-${index}`}
+              className={`node-dot${muted ? ' node-dot-muted' : ''}`}
+              cx={x}
+              cy={y}
+              r="7"
+            />
+          );
+        })
+      )}
+    </svg>
+  ),
+};
 
 export default function PracticePage() {
   const groupedAlgorithms = algorithmCategories.map((category) => ({
@@ -959,12 +1155,12 @@ export default function PracticePage() {
       <section className="practice-hero">
         <div>
           <p className="practice-eyebrow">Practice hub</p>
-          <h2>Search patterns, node graphics, and 40 core algorithms</h2>
+          <h2>Search patterns, node graphs, and 40 core algorithms</h2>
           <p>
             Use this page as a guided study tool. Review search patterns used in
-            this app, visualize graph structures, explore code samples, and then
-            work through the algorithm catalog with clear steps, examples, and
-            the reasoning behind each approach.
+            this app, visualize node graphs, and then work through the algorithm
+            catalog with clear steps, examples, and sample solutions for every
+            algorithm.
           </p>
         </div>
         <div className="practice-actions">
@@ -973,9 +1169,6 @@ export default function PracticePage() {
           </a>
           <a className="practice-button practice-button-secondary" href="#node-graphics">
             Node graphics
-          </a>
-          <a className="practice-button" href="#code-examples">
-            Code samples
           </a>
           <a className="practice-button practice-button-secondary" href="#algorithm-catalog">
             Algorithm catalog
@@ -1045,52 +1238,14 @@ export default function PracticePage() {
         </div>
       </section>
 
-      <section className="practice-section" id="code-examples">
-        <header className="practice-section-header">
-          <div>
-            <h2>Sample Python and JavaScript implementations</h2>
-            <p>
-              Keep these snippets close while practicing. Each example pairs a
-              Python solution with an equivalent JavaScript implementation.
-            </p>
-          </div>
-        </header>
-        <div className="code-sample-grid">
-          {codeSamples.map((sample) => (
-            <article className="code-sample-card" key={sample.id}>
-              <header className="code-sample-header">
-                <div>
-                  <h3>{sample.title}</h3>
-                  <p className="code-sample-focus">{sample.focus}</p>
-                </div>
-              </header>
-              <p className="code-sample-description">{sample.description}</p>
-              <div className="code-sample-blocks">
-                <div>
-                  <span className="code-language">Python</span>
-                  <pre className="code-block">
-                    <code>{sample.python}</code>
-                  </pre>
-                </div>
-                <div>
-                  <span className="code-language">JavaScript</span>
-                  <pre className="code-block">
-                    <code>{sample.javascript}</code>
-                  </pre>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="practice-section" id="algorithm-catalog">
         <header className="practice-section-header">
           <div>
             <h2>40 algorithms every programmer should know</h2>
             <p>
               Each algorithm includes a quick summary, a step-by-step solving
-              approach, the intuition for why it works, and a concrete example.
+              approach, the intuition for why it works, a node graph, and sample
+              solutions in Python and JavaScript.
             </p>
           </div>
         </header>
@@ -1132,35 +1287,65 @@ export default function PracticePage() {
                 </span>
               </header>
               <div className="practice-algorithm-grid">
-                {category.items.map((algorithm) => (
-                  <article key={algorithm.id} className="algorithm-card">
-                    <header className="algorithm-card-header">
-                      <div>
-                        <h4>{algorithm.name}</h4>
-                        <p className="algorithm-category">{algorithm.category}</p>
+                {category.items.map((algorithm) => {
+                  const solution = algorithmSolutions[algorithm.id];
+                  const diagramKey = diagramById[algorithm.id] || 'array-scan';
+                  const renderDiagram = diagramRenderers[diagramKey];
+
+                  return (
+                    <article key={algorithm.id} className="algorithm-card">
+                      <header className="algorithm-card-header">
+                        <div>
+                          <h4>{algorithm.name}</h4>
+                          <p className="algorithm-category">{algorithm.category}</p>
+                        </div>
+                        <span className="algorithm-complexity">{algorithm.complexity}</span>
+                      </header>
+                      <p className="algorithm-summary">{algorithm.summary}</p>
+                      {requirementsById[algorithm.id] && (
+                        <p className="algorithm-requirements">
+                          <strong>Requires:</strong> {requirementsById[algorithm.id].join(', ')}
+                        </p>
+                      )}
+                      <div className="algorithm-details">
+                        <h5>Solve it by</h5>
+                        <ol className="algorithm-steps">
+                          {algorithm.steps.map((step) => (
+                            <li key={step}>{step}</li>
+                          ))}
+                        </ol>
+                        <h5>Why it works</h5>
+                        <p>{algorithm.why}</p>
+                        <h5>Example</h5>
+                        <p className="algorithm-example">{algorithm.example}</p>
                       </div>
-                      <span className="algorithm-complexity">{algorithm.complexity}</span>
-                    </header>
-                    <p className="algorithm-summary">{algorithm.summary}</p>
-                    {requirementsById[algorithm.id] && (
-                      <p className="algorithm-requirements">
-                        <strong>Requires:</strong> {requirementsById[algorithm.id].join(', ')}
-                      </p>
-                    )}
-                    <div className="algorithm-details">
-                      <h5>Solve it by</h5>
-                      <ol className="algorithm-steps">
-                        {algorithm.steps.map((step) => (
-                          <li key={step}>{step}</li>
-                        ))}
-                      </ol>
-                      <h5>Why it works</h5>
-                      <p>{algorithm.why}</p>
-                      <h5>Example</h5>
-                      <p className="algorithm-example">{algorithm.example}</p>
-                    </div>
-                  </article>
-                ))}
+                      <div className="algorithm-visual">
+                        <div className="algorithm-diagram">
+                          {renderDiagram ? renderDiagram() : null}
+                        </div>
+                        {solution && (
+                          <div className="algorithm-solution">
+                            <h5>Sample solution</h5>
+                            <div className="algorithm-code-grid">
+                              <div>
+                                <span className="code-language">Python</span>
+                                <pre className="code-block">
+                                  <code>{solution.python}</code>
+                                </pre>
+                              </div>
+                              <div>
+                                <span className="code-language">JavaScript</span>
+                                <pre className="code-block">
+                                  <code>{solution.javascript}</code>
+                                </pre>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             </section>
           ))}
