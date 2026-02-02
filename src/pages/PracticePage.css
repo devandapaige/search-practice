@@ -410,4 +410,10 @@
   .algorithm-group-header {
     flex-direction: column;
   }
+
+  .code-block {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: visible;
+  }
 }

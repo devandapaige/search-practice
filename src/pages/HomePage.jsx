@@ -28,6 +28,19 @@ export default function HomePage() {
           <CharacterList />
         </div>
       </div>
+      <footer className="app-footer">
+        <p>
+          Character browser data provided by{' '}
+          <a
+            href="https://rickandmortyapi.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-link"
+          >
+            The Rick and Morty API
+          </a>
+        </p>
+      </footer>
     </>
   );
 }
