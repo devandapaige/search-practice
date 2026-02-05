@@ -14,23 +14,21 @@
  * 
  * COMPONENT HIERARCHY:
  * App
- *   ├── Header
- *   ├── TopBar (quick filters, search, item count, sort)
- *   ├── Main Content Area
- *   │   ├── Sidebar (CharacterFilters - left side)
- *   │   └── Results (CharacterList - right side, takes most space)
+ *   ├── Header (practice hub branding + primary navigation)
+ *   ├── Routes
+ *   │   ├── PracticePage (search patterns + algorithm catalog)
+ *   │   └── HomePage (character browser layout)
  *   └── Footer
- * 
- * E-COMMERCE LAYOUT:
- * - Top bar with quick filters and search (like Crate & Barrel)
- * - Left sidebar for detailed filters
- * - Right side for results (takes up most of the page)
- * - Pagination at top and bottom of results
+ *
+ * ROUTING:
+ * - "/" redirects to "/practice"
+ * - "/practice" shows the study tool for algorithms and search patterns
+ * - "/characters" shows the Rick and Morty character browser
  */
 
-import TopBar from './components/TopBar';
-import CharacterFilters from './components/CharacterFilters';
-import CharacterList from './components/CharacterList';
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import PracticePage from './pages/PracticePage';
 import './App.css';
 
 /**
@@ -39,65 +37,38 @@ import './App.css';
  * @returns {JSX.Element} Main app UI
  */
 function App() {
+  const getNavLinkClass = ({ isActive }) =>
+    `app-nav-link${isActive ? ' app-nav-link-active' : ''}`;
+
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">Rick and Morty Character Browser</h1>
-        <p className="app-subtitle">
-          Explore characters from the Rick and Morty universe
-        </p>
+        <div className="app-header-inner">
+          <div className="app-header-text">
+            <h1 className="app-title">Algorithm Practice Studio</h1>
+            <p className="app-subtitle">
+              Search patterns, core algorithms, and guided code examples
+            </p>
+          </div>
+          <nav className="app-nav" aria-label="Primary">
+            <NavLink to="/practice" className={getNavLinkClass}>
+              Practice Hub
+            </NavLink>
+            <NavLink to="/characters" className={getNavLinkClass}>
+              Character Browser
+            </NavLink>
+          </nav>
+        </div>
       </header>
       
       <main className="app-main">
-        {/* 
-          TOP BAR
-          E-commerce style top bar with:
-          - Quick filter buttons (Dead Aliens, Ricks, Mortys, etc.)
-          - Search bar (compact version)
-          - Item count
-          - Sort dropdown
-        */}
-        <TopBar />
-        
-        {/* 
-          MAIN CONTENT AREA
-          Two-column layout: sidebar (filters) + main content (results)
-        */}
-        <div className="app-content">
-          {/* 
-            SIDEBAR - FILTERS
-            Left-hand side with detailed filter options.
-            Collapsible for better UX.
-          */}
-          <aside className="app-sidebar">
-            <CharacterFilters />
-          </aside>
-          
-          {/* 
-            MAIN CONTENT - RESULTS
-            Right-hand side taking up most of the page.
-            Displays character cards in a grid.
-            Includes pagination at top and bottom.
-          */}
-          <div className="app-results">
-            <CharacterList />
-          </div>
-        </div>
+        <Routes>
+          <Route path="/" element={<Navigate to="/practice" replace />} />
+          <Route path="/practice" element={<PracticePage />} />
+          <Route path="/characters" element={<HomePage />} />
+        </Routes>
       </main>
       
-      <footer className="app-footer">
-        <p>
-          Data provided by{' '}
-          <a 
-            href="https://rickandmortyapi.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="footer-link"
-          >
-            The Rick and Morty API
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }
